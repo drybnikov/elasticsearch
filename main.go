@@ -15,12 +15,12 @@ import (
 
 var es *elasticsearch.Client
 
-type errorResponse struct {
-	Error map[string]interface{}
-}
-
 func main() {
-	log.SetFlags(0)
+	a := App{}
+	a.Initialize("user", "pwd")
+	a.Run(":8000")
+
+	/*log.SetFlags(0)
 
 	var err error
 	es, err = elasticsearch.NewDefaultClient()
@@ -36,7 +36,7 @@ func main() {
 	defer res.Body.Close()
 	log.Println(res)
 
-	listen()
+	listen()*/
 }
 
 func listen() {
@@ -132,6 +132,7 @@ func getStudents(w http.ResponseWriter, r *http.Request) {
 		log.Printf("doc %s", doc)
 
 		newStudent := Student{
+			ID:           "sss",
 			Name:         doc["name"].(string),
 			Age:          int64(doc["age"].(float64)),
 			AverageScore: doc["average_score"].(float64),
@@ -146,10 +147,4 @@ func getStudents(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, buf.String())
-}
-
-type Student struct {
-	Name         string  `json:"name"`
-	Age          int64   `json:"age"`
-	AverageScore float64 `json:"average_score"`
 }
