@@ -9,8 +9,12 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/main.go",
-            "env": {},
+            "program": "${workspaceFolder}",
+            "env": {
+                "INDEX_NAME": "students",
+                "ELASTIC_HOST": "https://8d53c82052184661ab48cc572ab4aee2.westeurope.azure.elastic-cloud.com:9243",
+                "PORT": ":8000"
+            },
             "args": []
         }
     ]

@@ -37,7 +37,7 @@ func (s *Student) deleteStudent(es *elasticsearch.Client) error {
 	return err
 }
 
-func (s *Student) createStudent(res esapi.Response) error {
+func (s *Student) createStudent(res *esapi.Response) error {
 	var req map[string]interface{}
 	err := json.NewDecoder(res.Body).Decode(&req)
 
@@ -51,4 +51,31 @@ func (s *Student) createStudent(res esapi.Response) error {
 	defer res.Body.Close()
 
 	return err
+}
+
+func parseStudents(res *esapi.Response) (*[]Student, error) {
+	var students []Student
+	var m map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&m); err != nil {
+		log.Fatalf("Error parsing the response body: %s", err)
+		return nil, err
+	}
+	for _, hit := range m["hits"].(map[string]interface{})["hits"].([]interface{}) {
+		// Parse the attributes/fields of the document
+		id := hit.(map[string]interface{})["_id"].(string)
+		doc := hit.(map[string]interface{})["_source"].(map[string]interface{})
+
+		log.Printf("doc %s", doc)
+
+		newStudent := Student{
+			ID:           id,
+			Name:         doc["name"].(string),
+			Age:          int64(doc["age"].(float64)),
+			AverageScore: doc["average_score"].(float64),
+		}
+
+		students = append(students, newStudent)
+	}
+
+	return &students, nil
 }

@@ -17,26 +17,8 @@ var es *elasticsearch.Client
 
 func main() {
 	a := App{}
-	a.Initialize("user", "pwd")
-	a.Run(":8000")
-
-	/*log.SetFlags(0)
-
-	var err error
-	es, err = elasticsearch.NewDefaultClient()
-	if err != nil {
-		log.Fatalf("Error creating the client: %s", err)
-	}
-
-	res, err := es.Info()
-	if err != nil {
-		log.Fatalf("Error getting response: %s", err)
-	}
-
-	defer res.Body.Close()
-	log.Println(res)
-
-	listen()*/
+	a.Initialize("elastic", "aufNLvJgrYlHcF5EdCY8p2a1")
+	a.Run()
 }
 
 func listen() {
